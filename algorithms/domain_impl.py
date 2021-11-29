@@ -1,6 +1,54 @@
 import math
 import sys
 
+from generator import DataGenerator
+
+COL_Candidate_Index = "Candidate Index"
+COL_Candidate_Value = "Candidate Value"
+COL_Current_Best_Candidate_Value = "Current Best Candidate Value"
+COL_Current_Best_Candidate_Index = "Current Best Candidate Index"
+
+
+
+def get_size_str(size):
+    if 1 < size <= 2:
+        return "100~1000"
+
+    if 2 < size <= 3:
+        return "1000~5000"
+
+    if 3 < size <= 4:
+        return "5000~10000"
+
+    if 4 < size <= 5:
+        return "100000~1000000"
+
+    return "10~100"
+
+
+def calculate_random_stop_point(size):
+    if 1 < size <= 2:
+        gn = DataGenerator(100, 1000)
+        return int(round(gn.next_val()))
+        # return "100~1000"
+
+    if 2 < size <= 3:
+        gn = DataGenerator(1000, 5000)
+        return int(round(gn.next_val()))
+        # return "1000~5000"
+
+    if 3 < size <= 4:
+        gn = DataGenerator(5000, 10000)
+        return int(round(gn.next_val()))
+        # return "5000~10000"
+
+    if 4 < size <= 5:
+        gn = DataGenerator(100000, 1000000)
+        return int(round(gn.next_val()))
+        # return "100000~1000000"
+
+    return int(round((DataGenerator(10, 100)).next_val()))
+    # "10~100"
 
 class Prime_37percent:
     def __init__(self):
