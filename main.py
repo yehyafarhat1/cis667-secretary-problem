@@ -6,6 +6,7 @@ import number_helpers
 from algorithms.domain_impl import Prime_37percent
 from algorithms.fake_algorithms import *
 from generator import DataGenerator
+from interactive import InteractiveTester
 from test import AutomaticTester
 
 domain_algorithm = Prime_37percent()
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     if is_num:
         if num == 1:
             print("To start the interactive experiments,"
-                  " input a number to determine which experiment to use.\r\n"
+                  " input a number to determine which opponent algorithm to use.\r\n"
                   "Input non-number other numbers which are not included into this hints "
                   "to exit without running any experiments;\r\n")
 
@@ -107,11 +108,14 @@ if __name__ == "__main__":
             is_num, exp_num = number_helpers.to_int_tuple(experiment)
 
             if is_num and supported_experiments_list.__len__() >= exp_num > 0:
-                print("Now start experiment {exp_name} ...... {exp_value} \r\n".format(
-                    exp_name=supported_experiments_list[exp_num - 1],
-                    exp_value=supported_experiments_map[
-                        supported_experiments_list[exp_num - 1]].__str__()))
+                # print("Now start experiment {exp_name} ...... {exp_value} \r\n".format(
+                #     exp_name=supported_experiments_list[exp_num - 1],
+                #     exp_value=supported_experiments_map[
+                #         supported_experiments_list[exp_num - 1]].__str__()))
 
+                tester = InteractiveTester()
+                tester.start_test(supported_experiments_map[
+                                      supported_experiments_list[exp_num - 1]])
             else:
                 pass
 
