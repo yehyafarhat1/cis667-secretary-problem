@@ -80,6 +80,6 @@ class Prime_37percent:
             if whether_select:
                 self.current_best_val = current_value
                 self.current_best_index = current_index
-                return True, current_index
+                return True, self.current_best_val
 
-        return False, self.current_best_index
+        return False, self.current_best_val

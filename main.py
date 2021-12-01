@@ -3,26 +3,27 @@ import copy
 import os
 
 import number_helpers
-from algorithms.fake_tree_search import FakeTreeSearch
 from algorithms.domain_impl import Prime_37percent
+from algorithms.fake_algorithms import *
 from generator import DataGenerator
 from test import AutomaticTester
 
 domain_algorithm = Prime_37percent()
 
-instance_a = FakeTreeSearch()
+instance_a = RandomAlgorithm()
+instance_b = BeamSearchWithLSTM()
 
 supported_experiments_list = []
 supported_experiments_map = {}
 # TODO: Add all the experiment models here
-# supported_experiments_list.append("Experiment A")
-# supported_experiments_map["Experiment A"] = "This is A"
+supported_experiments_list.append(instance_a.name())
+supported_experiments_map[instance_a.name()] = instance_a
+supported_experiments_list.append(instance_b.name())
+supported_experiments_map[instance_b.name()] = instance_b
 # supported_experiments_list.append("Experiment B")
 # supported_experiments_map["Experiment B"] = "This is B"
 # supported_experiments_list.append("Experiment C")
 # supported_experiments_map["Experiment C"] = "This is C"
-supported_experiments_list.append(instance_a.name())
-supported_experiments_map[instance_a.name()] = instance_a
 
 
 #
@@ -131,9 +132,15 @@ if __name__ == "__main__":
             is_num, exp_num = number_helpers.to_int_tuple(experiment)
 
             if is_num and supported_experiments_list.__len__() >= exp_num > 0:
-                tester = AutomaticTester(DataGenerator(5, 60))
-                tester.start_test(supported_experiments_map[
-                                      supported_experiments_list[exp_num - 1]])
+
+                exp2 = input("Please decide how many sizes should be tested. "
+                             "Input 1~5, if you decide run 5 sizes, it will take much time: \r\n")
+                is_num, exp2_num = number_helpers.to_int_tuple(exp2)
+
+                if is_num and 1 <= exp2_num <= 5:
+                    tester = AutomaticTester(exp2_num)
+                    tester.start_test(supported_experiments_map[
+                                          supported_experiments_list[exp_num - 1]])
                 pass
             else:
                 pass
