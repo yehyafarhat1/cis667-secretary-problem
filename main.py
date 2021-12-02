@@ -1,6 +1,7 @@
 import csv
 import copy
 import os
+import io
 
 import number_helpers
 from algorithms.domain_impl import Prime_37percent
