@@ -36,11 +36,11 @@ class DfsTreeSearchAlgorithmWithDistribution:
 
     ## return true or false , selected index
     def decide(self, current_index, current_value):
-        dt2 = round(self.norm(current_value,0,10))
+        dt2 = round(self.norm(current_value,0,9))
 
         if(len(self.list_historical_candidates)>0):
             dt2 = round(self.norm(current_value - min(self.list_historical_candidates),
-                                  0,10))
+                                  0,9))
 
         self.norm_hist_candidates.append(dt2)
         self.list_historical_candidates.append(current_value)
@@ -65,7 +65,8 @@ class DfsTreeSearchAlgorithmWithDistribution:
         current_exp_sum = 0.0
         while True:
             for i in range(5):
-                item2 = self.dist_sample[current_index]
+                item2 = self.dist_sample[
+                    (current_index  + random.randint(0,len(self.dist_sample))) % len(self.dist_sample) ]
                 node = SimpleTreeNode(item2, sub_current)
                 z = node.expected_value()
                 current_exp_sum += z
@@ -87,7 +88,7 @@ class DfsTreeSearchAlgorithmWithDistribution:
         return False, current_value
 
     def norm(self, dt, left, right):
-        dt2 = dt / 100.0
+        dt2 = dt / 60.0
         range = right - left
         return left + (range * dt2)
 
