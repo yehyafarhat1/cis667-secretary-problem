@@ -4,6 +4,7 @@ import os
 import io
 
 import number_helpers
+from algorithms.DFS_TreeSearch import DfsTreeSearchAlgorithmWithDistribution
 from algorithms.LSTM_decision import LstmDecisionAlgorithm1
 from algorithms.domain_impl import Prime_37percent
 from algorithms.fake_algorithms import *
@@ -16,6 +17,7 @@ domain_algorithm = Prime_37percent()
 instance_a = RandomAlgorithm()
 instance_b = BeamSearchWithLSTM()
 instance_c = LstmDecisionAlgorithm1()
+instance_d = DfsTreeSearchAlgorithmWithDistribution()
 
 supported_experiments_list = []
 supported_experiments_map = {}
@@ -26,8 +28,8 @@ supported_experiments_list.append(instance_b.name())
 supported_experiments_map[instance_b.name()] = instance_b
 supported_experiments_list.append(instance_c.name())
 supported_experiments_map[instance_c.name()] = instance_c
-# supported_experiments_list.append("Experiment C")
-# supported_experiments_map["Experiment C"] = "This is C"
+supported_experiments_list.append(instance_d.name())
+supported_experiments_map[instance_d.name()] = instance_d
 
 
 #

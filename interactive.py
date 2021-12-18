@@ -29,7 +29,7 @@ class InteractiveTester:
         best_value = 0.0
         player_best_value = 0
         player_selected = False
-        model_selected = False
+        model_best_value = 0
 
         for round in range(0, self.round_number):
             val = self.generator.next_val()
@@ -47,16 +47,19 @@ class InteractiveTester:
 
             if is_num and num_val == 0:
                 break
-            elif is_num and num_val == 1 and player_selected == False:
+            elif is_num and num_val == 1: #and player_selected == False:
                 # select
                 player_selected = True
-                player_best_value = max(player_best_value, val)
+                player_best_value = val
                 pass
             else:
                 # don't select, next round
                 pass
 
-            model_selected, model_best_value = model_instance.decide(round, val)
+            model_selected, v_value = model_instance.decide(round, val)
+            print('model_selected:{sel}   {val}'.format(sel=model_selected, val=v_value))
+            if model_selected:
+                model_best_value = val
 
             if player_selected or model_selected:
                 if player_best_value == model_best_value:
@@ -89,4 +92,3 @@ class InteractiveTester:
               .format(round=self.round_number, best=best_value,
                       player_score=self.player_score,
                       ai_score=self.ai_score))
-
