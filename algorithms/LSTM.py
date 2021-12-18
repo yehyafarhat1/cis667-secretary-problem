@@ -184,6 +184,6 @@ def make_decision(candidate_lst):
   return candidate_lst[len(candidate_lst)-1], len(candidate_lst)-1
 
 
-for i in range(500):
+for i in range(500): # run 500 experiments
   new_candidates=np.random.choice(11, 20, p =[0.1, 0.1, 0.05, 0.2, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1])
   print(make_decision(new_candidates))
