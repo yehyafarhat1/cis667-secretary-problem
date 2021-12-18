@@ -105,15 +105,21 @@ def predict_list(candidate_list):  # this function will predict the number of ca
 
 
 def make_decision(candidate_lst):                             
- # lstm_prediction_lst_length = len(predict_list(candidate_lst)) # this is the list lstm predicts, this is based only on the first real value of the candidates while all other predictions are based on lstm 
-  lstm_prediction_lst_length =0
+  lstm_prediction_lst_length = len(predict_list(candidate_lst)) # this is the list lstm predicts, this is based only on the first real value of the candidates while all other predictions are based on lstm 
+  #lstm_prediction_lst_length =0
   # we will now try to apply the 37% rule according to our predicted length of the list, it will always be 20 unless the lstm model predicts a 0 before we get to a length of 20 then in that case it will be shorter
   # we will reject the first  length(lstm_prediction_lst)/ e candidates 
   #print(lstm_prediction_lst_length)
   
   if lstm_prediction_lst_length == 0:  #this is a corner case where lstm predicts that we will not get any candidates, if we get one accept the first one that arrives 
-        while lstm_prediction_lst_length == 0:
-          lstm_prediction_lst_length = len(predict_list(candidate_lst))
+      if candidate_lst[0] == 0:
+        
+        print("did not get any candidates")
+        return 0,-1
+      else:
+      
+       print("lstm predicted that we will not get any candidates, we ended up getting one and immediately accepted")
+       return candidate_lst[0],0
 
 
 
