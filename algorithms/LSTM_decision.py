@@ -26,23 +26,22 @@ class LstmDecisionAlgorithm1:
 
     ## return true or false , selected index
     def decide(self, current_index, current_value):
-        if current_index <= 20:
-            return False, current_value
+        # if current_index <= 20:
+        #     return False, current_value
 
         dt2 = round(self.norm(current_value, 0, 10))
         self.norm_hist_candidates.append(dt2)
         self.list_historical_candidates.append(current_value)
-        (x,y) = self.net.make_decision(np.array( self.norm_hist_candidates))
+        (x, y) = self.net.make_decision(np.array([dt2]))
 
-        if x is not None and y is not None and x > 0 and x < len(self.list_historical_candidates):
+        if x is not None and y is not None and x < dt2:
             # x is the most likely value in the appeared candidates
             value = self.list_historical_candidates[x]
             if current_value >= value:
                 return True, current_value
 
-        #fake implementation to ensure LSTM algorithm integration
+        # fake implementation to ensure LSTM algorithm integration
         return False, current_value
-
 
     def norm(self, dt, left, right):
         dt2 = dt / 100.0
