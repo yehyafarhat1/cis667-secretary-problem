@@ -47,7 +47,7 @@ class InteractiveTester:
 
             if is_num and num_val == 0:
                 break
-            elif is_num and num_val == 1 and player_selected == False:
+            elif is_num and num_val == 1: #and player_selected == False:
                 # select
                 player_selected = True
                 player_best_value = val

@@ -21,6 +21,7 @@ class DfsTreeSearchAlgorithmWithDistribution:
         np_samples = np.array(candidates).reshape(25 * 20, 1)
         self.dist_sample = np_samples.squeeze().tolist()
         self.root = None
+        self.prev_node_count = 0
         pass
 
     def name(self):
@@ -30,13 +31,17 @@ class DfsTreeSearchAlgorithmWithDistribution:
         cnt = 0
         if self.root is not None and isinstance(self.root, SimpleTreeNode):
             cnt = self.root.count_search_node_numbers()
-        str_result = "Search nodes count: {cnt}\r\n".format(cnt=cnt)
+        str_result = "Search nodes count: {cnt}\r\n".format(cnt=cnt + self.prev_node_count)
         print(str_result)
 
     ## return true or false , selected index
     def decide(self, current_index, current_value):
+        dt2 = round(self.norm(current_value,0,10))
 
-        dt2 = round(self.norm(current_value, 0, 10))
+        if(len(self.list_historical_candidates)>0):
+            dt2 = round(self.norm(current_value - min(self.list_historical_candidates),
+                                  0,10))
+
         self.norm_hist_candidates.append(dt2)
         self.list_historical_candidates.append(current_value)
 
@@ -56,22 +61,26 @@ class DfsTreeSearchAlgorithmWithDistribution:
         # search 100 steps with the expected greatest value
         current_index = 0
         sub_current = current
+        current_node_count = 0
         current_exp_sum = 0.0
-        for i in range(5):
+        while True:
+            for i in range(5):
+                item2 = self.dist_sample[current_index]
+                node = SimpleTreeNode(item2, sub_current)
+                z = node.expected_value()
+                current_exp_sum += z
+                sub_current = node
+                current_node_count += 1
+                self.prev_node_count += 1
+                current_index += 1
+
             if current_index >= len(self.dist_sample):
                 break
-
-            item2 = self.dist_sample[current_index]
-            node = SimpleTreeNode(item2, current)
-            z = node.expected_value()
-            current_exp_sum += z
-
-            current_index += 1
-            pass
+        pass
 
 
         # sub_current is the expected max in 100 tries
-        if dt2 >= current_exp_sum / (sub_current.count_search_node_numbers() + current_index):
+        if dt2 >= (current_exp_sum / current_node_count):
             return True, current_value
 
         # fake implementation to ensure LSTM algorithm integration
