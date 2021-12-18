@@ -135,7 +135,7 @@ def make_decision(candidate_lst):
 
     if candidate_lst[i] ==0:
       print("lstm miscalculation, number of candidates predicted by lstm was bigger than what we actaully got. rejected all candidates")
-      return 0,i #-------------------------------------
+      return 0 #-------------------------------------
        #this means that our lstm model has made a miscalculation that we will get further candidate. if we get a 0 then that means we rejected our last candidate and didnt get anymore so we end up with no candidate 
 
     if candidate_lst[i] > max: max = candidate_lst[i]
@@ -151,7 +151,7 @@ def make_decision(candidate_lst):
     if score == 0:                      #---------------------------
       if prob.item() > 0.1:
         print("high probability of no candidates, take current option")
-        return candidate_lst[i], i #if the lstm model predicts that there is a high probability of 0 (not get getting anymore candidates) then abandon the plan and take whatever candidate we have now
+        return candidate_lst[i] #if the lstm model predicts that there is a high probability of 0 (not get getting anymore candidates) then abandon the plan and take whatever candidate we have now
       else:pass                                   #otherwise continue with the 37% rule calculations
 
 
@@ -161,11 +161,11 @@ def make_decision(candidate_lst):
   for j in range(len(remaining_candidates)):
     if remaining_candidates[j] ==0:
       print("no candidates left after rejecting first 37%") 
-      return 0,j+reject #-----------------------------------------
+      return 0 #-----------------------------------------
                                                             #--------------------------------------------------
     if remaining_candidates[j] > max:
       print("37% applied properly using the predicted length of the list")
-      return remaining_candidates[j],j+reject # this means we have succesfully applied the 37% rule
+      return remaining_candidates[j] # this means we have succesfully applied the 37% rule
     else:
       x = dictionary[candidate_lst[j]]
       y, v = net(x, v)
@@ -176,12 +176,12 @@ def make_decision(candidate_lst):
       if score == 0:                          #-----------------------------------------------
         if prob.item() > 0.1:
           print("high probability of no candidates, take current option")
-          return candidate_lst[j], j+reject # same as before, before we reject the candidate and move on we predict the next value. if the model predicts with a high probability that we will not get anymore candidates abandon the task and take whatever we have now
+          return candidate_lst[j] # same as before, before we reject the candidate and move on we predict the next value. if the model predicts with a high probability that we will not get anymore candidates abandon the task and take whatever we have now
     
 
   #if both these loops do not return a value then that means our best candidates were contained in the first 37% and we reject all of them. since the length of the list represents the timeframe we want to hire someone in we just take the last candidate and we can disregard the possibility of an infinite time frame
   print("allocated time frame to choose candidate is done, pick final candidate before due date")
-  return candidate_lst[len(candidate_lst)-1], len(candidate_lst)-1
+  return candidate_lst[len(candidate_lst)-1]
 
 
 for i in range(500): # run 500 experiments
