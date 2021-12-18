@@ -1,41 +1,22 @@
-import LSTM
+import algorithms.LSTM
 import random
 import numpy as np
 import torch as tr
+import os
+import pickle
 
 
-class LstmDecisionAlgorithm:
+class LstmDecisionAlgorithm1:
     def __init__(self):
-        self.net = LSTM.Net(3)
-        self.dictionary = { } # TODO: deserialize the dictionary from the model
-
-        # TODO: complete algorithm integration
-        population = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        weights = [0.05, 0.1, 0.05, 0.1, 0.3, 0.0, 0.1, 0.1, 0.1, 0.1]
-
-        candidates = []
-
-        for i in range(10):
-            size = random.randint(2, 10)
-            n = np.random.choice(11, 20, p=[0.1, 0.1, 0.05, 0.3, 0.05, 0.05, 0.05, 0.1, 0.05, 0.05, 0.1])
-            candidates.append(n)
-
-        self.candidate_score = set()
-        for z in candidates:
-            for j in z:
-                self.candidate_score.add(j)
-        self.candidate_score = tuple(self.candidate_score)  # deterministic order
-
-        self.tokens = {}
-
-        I = tr.eye(len(self.candidate_score))
-        dictionary = {
-            word: I[w].reshape(1, 1, len(self.candidate_score))
-            for w, word in enumerate(self.candidate_score)}
+        self.norm_hist_candidates = []
+        self.list_historical_candidates = []
+        self.net = tr.load('./algorithms/net20211217.torch')
+        # with open('./algorithms/net20211217.pkl', 'rb') as infile:
+        #     self.net = pickle.load(infile)
         pass
 
     def name(self):
-        return "LSTM Decision Algorithm"
+        return "LSTM Decision Algorithm net20211217"
 
     def __str__(self, self_print=False, print_nodes=False):
         str_result = "Search nodes not applicable\r\n"
@@ -45,27 +26,25 @@ class LstmDecisionAlgorithm:
 
     ## return true or false , selected index
     def decide(self, current_index, current_value):
+        if current_index <= 20:
+            return False, current_value
 
-        size = random.randint(2, 10)
-        new_candidates = np.random.choice(11, size, p=[0.1, 0.1, 0.05, 0.3, 0.05, 0.05, 0.05, 0.1, 0.05, 0.05, 0.1])
+        dt2 = round(self.norm(current_value, 0, 10))
+        self.norm_hist_candidates.append(dt2)
+        self.list_historical_candidates.append(current_value)
+        (x,y) = self.net.make_decision(np.array( self.norm_hist_candidates))
 
-        print(new_candidates)
-
-        score = new_candidates[0]
-        v = None
-        print(score)
-
-        for t in range(len(new_candidates) - 1):
-            x = self.dictionary[score]
-            y, v = self.net(self.dictionary[self.tokens[t]], v)
-            y = y.squeeze()  # ignore singleton dimensions for time-step/example
-            w = y.argmax()
-            single_candidate = self.candidate_score[w]
-            prob = y[w]
-            print(single_candidate, prob.item())
+        if x is not None and y is not None and x > 0 and x < len(self.list_historical_candidates):
+            # x is the most likely value in the appeared candidates
+            value = self.list_historical_candidates[x]
+            if current_value >= value:
+                return True, current_value
 
         #fake implementation to ensure LSTM algorithm integration
-        return False, 0
+        return False, current_value
 
 
-
+    def norm(self, dt, left, right):
+        dt2 = dt / 100.0
+        range = right - left
+        return left + (range * dt2)
