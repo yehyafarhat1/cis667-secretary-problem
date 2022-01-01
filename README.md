@@ -16,7 +16,7 @@ https://medium.com/@p.rajeshbabu6666/how-to-create-new-environments-in-anaconda-
 
 When a conda/Anaconda virtual environment is active, use
 ```
-pip -r requirements.txt
+pip install -r requirements.txt
 ```
 to install all the dependencies automatically. 
 Make sure to execute the command in the same directory with requirements.txt. 
